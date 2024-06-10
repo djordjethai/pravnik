@@ -8,7 +8,9 @@ from re import search
 from requests import get
 
 from myfunc.mojafunkcija import send_email
-from myfunc.prompts import PromptDatabase
+from myfunc.varvars_dicts import work_prompts
+
+mprompts = work_prompts()
 
 # Set the locale to Serbian
 setlocale(LC_TIME, 'sr_RS.utf8')
@@ -100,9 +102,7 @@ def main():
     print(" ")
     text_maila = procitaj_parlament()
     if len(text_maila ) > 3:
-        with PromptDatabase() as db:
-            prompt_map = db.get_prompts_by_names(['new_law_email'], [os.getenv("NEW_LAW_EMAIL")])
-        uputstvo = prompt_map.get("new_law_email", "You are helpful assistant").format(text_maila=text_maila)      
+        uputstvo = mprompts["new_law_email"].format(text_maila=text_maila)      
                
         print(" ")
         print("------------------------------------------------------------------------------------------------")

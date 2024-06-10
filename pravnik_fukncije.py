@@ -10,17 +10,10 @@ import io
 import docx
 import PyPDF2
 from datetime import datetime
-from myfunc.prompts import PromptDatabase
-from myfunc.varvars_dicts import work_vars
 
-try:
-    x = st.session_state.short_summary_end
-except:
-    with PromptDatabase() as db:
-        prompt_map = db.get_prompts_by_names(["short_summary_begin", "short_summary_end"],[os.getenv("SHORT_SUMMARY_BEGIN"), os.getenv("SHORT_SUMMARY_BEGIN_END")])
-        st.session_state.short_summary_begin = prompt_map.get("short_summary_begin", "You are helpful assistant that always writes in Serbian.")
-        st.session_state.short_summary_end = prompt_map.get("short_summary_end", "You are helpful assistant that always writes in Serbian.")
+from myfunc.varvars_dicts import work_prompts, work_vars
 
+mprompts = work_prompts()
 
 def dl_paragraf(url):
    
@@ -99,9 +92,9 @@ def sumiraj_zakone(full_text, zakon):
     docs = text_splitter.split_documents([doc])
 
     # promptovi za prvu i drugu fazu sumarizacije
-    prompt_string_pocetak = st.session_state.short_summary_begin
+    prompt_string_pocetak = mprompts["short_summary_begin"]
     
-    prompt_string_kraj = st.session_state.short_summary_end
+    prompt_string_kraj = mprompts["short_summary_end"]
     
     PROMPT = PromptTemplate(
             template=prompt_string_pocetak, input_variables=["text"]
