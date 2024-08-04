@@ -1,0 +1,8 @@
+myfunc @ git+https://github.com/djordjethai/myfunc.git
+openai
+streamlit
+bs4
+requests
+PyPDF2
+python-docx
+langchain
